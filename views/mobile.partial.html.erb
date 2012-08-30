@@ -1,4 +1,12 @@
-<script type="text/javascript" src="<%= request.scheme %>://<%= request.host_with_port %>/js/new-playlist.js"></script>
+<button id="play">Play</button><br />
+<button id="pause">Pause</button><br />
+<button id="skip">Skip</button><br />
+<button id="prev">Previous</button><br />
+
+<input type="text" id="start-id" value="2769" /><br />
+<input type="text" id="playlist-length" value="13" /><br />
+<button id="generate-new">Generate new playlist</button>
+
 <script type="text/javascript">
   var onReady = function() {
     playlist = null;
@@ -38,18 +46,22 @@
     });
   };
 
-  if(window.cordova) {
-    document.addEventListener("deviceready", onReady, false);
-  } else {
-    $(document).ready(onReady);
-  }
+  var loadLibrary = function(libraryName) {
+    if(!window.waitingForLibrary) {
+      window.waitingForLibrary = {};
+    }
+
+    var deferred = $.Deferred();
+    window.waitingForLibrary[libraryName] = deferred;
+    $("head").append('<script type="text/javascript" src="<%= request.scheme %>://<%= request.host_with_port %>/js/' + libraryName + '.js"></s' + 'cript>');
+    return deferred;
+  };
+
+  var required = ["new-playlist"];
+
+  var waiters = _(required).map(function(libraryName) {
+    return loadLibrary(libraryName);
+  });
+
+  $.when.apply(this, waiters).done(onReady);
 </script>
-
-<button id="play">Play</button><br />
-<button id="pause">Pause</button><br />
-<button id="skip">Skip</button><br />
-<button id="prev">Previous</button><br />
-
-<input type="text" id="start-id" value="2769" /><br />
-<input type="text" id="playlist-length" value="13" /><br />
-<button id="generate-new">Generate new playlist</button>

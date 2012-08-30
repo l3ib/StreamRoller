@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Cordova</title>
+<script type="text/javascript" charset="utf-8" src="js/lib/jquery-1.8.0.js"></script>
+<script type="text/javascript">
+  var onReady = function() {
+    $("#connect").on("click", function() {
+      var address = $("#connect-address").val();
+      $.get("http://" + address + "/mobile.partial.html", function(data) {
+        $("body").replaceWith(data);
+      });
+    });
+  };
+
+  $(document).ready(onReady);
+</script>
+</head>
+<body>
+  Server: <input id="connect-address" type="text" value="24.212.224.140:4567" />
+  <button id="connect">Connect</button>
+</body>
+</html>

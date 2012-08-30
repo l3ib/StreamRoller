@@ -10,7 +10,7 @@ Media = function(source, mediaSuccess, mediaError, mediaStatus) {
   }
 
   this.audio = new Audio(source);
-  console.log("New audio created");
+  console.log("New audio created with source: " + source);
   this.mediaSuccess = mediaSuccess;
   this.mediaError = mediaError;
   this.mediaStatus = mediaStatus;
@@ -18,11 +18,13 @@ Media = function(source, mediaSuccess, mediaError, mediaStatus) {
   var that = this;
 
   $(this.audio).on("ended", function() {
-    that.mediaSuccess(4);
+    console.log("Playback ended");
+    that.mediaStatus(4);
   });
 };
 
 Media.prototype.play = function() {
+  console.log("play called");
   this.audio.play();
 }
 
@@ -38,5 +40,5 @@ Media.prototype.pause = function() {
 Media.prototype.release = function() {};
 
 Media.prototype.getCurrentPosition = function(callback, error_callback) {
-  callback(this.audio.currentTime)
+  callback(this.audio.currentTime);
 };
