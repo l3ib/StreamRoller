@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'sinatra/partial'
 require 'initialization_helper'
 require 'utils'
 require 'library'
@@ -12,6 +13,10 @@ require 'java_image'
 module StreamRoller
   class StreamRoller < Sinatra::Base
     include InitializationHelper
+    register Sinatra::Partial
+
+    Tilt.register Tilt::ERBTemplate, 'html.erb'
+    set :partial_template_engine, :erb
 
     set :static, true
     set :public, 'public/'
@@ -39,6 +44,14 @@ module StreamRoller
     get '/' do
       puts self.request.user_agent
       send_file 'public/index.html'
+    end
+
+    get '/mobile' do
+      erb :mobile
+    end
+
+    get '/*.partial.html' do
+      erb :"#{params[:splat][0]}.partial"
     end
 
     get '/list/?*/?' do

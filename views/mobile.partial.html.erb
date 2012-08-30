@@ -1,0 +1,55 @@
+<script type="text/javascript" src="<%= request.scheme %>://<%= request.host_with_port %>/js/new-playlist.js"></script>
+<script type="text/javascript">
+  var onReady = function() {
+    playlist = null;
+    var generateNewPlaylist = function() {
+      var start = $("#start-id").val();
+      var length = $("#playlist-length").val();
+
+      var sublist = [];
+      for(var i = 0; i < length; i++) {
+        sublist.push(Number(start) + i);
+      }
+      console.log(sublist);
+      playlist = new Playlist(sublist);
+    };
+
+    generateNewPlaylist();
+
+    $("#play").on("click", function() {
+      console.log("Play clicked");
+      playlist.playCurrent();
+    });
+
+    $("#pause").on("click", function() {
+      playlist.pause();
+    });
+
+    $("#skip").on("click", function() {
+      playlist.skip();
+    });
+
+    $("#prev").on("click", function() {
+      playlist.prev();
+    });
+
+    $("#generate-new").on("click", function() {
+      generateNewPlaylist();
+    });
+  };
+
+  if(window.cordova) {
+    document.addEventListener("deviceready", onReady, false);
+  } else {
+    $(document).ready(onReady);
+  }
+</script>
+
+<button id="play">Play</button><br />
+<button id="pause">Pause</button><br />
+<button id="skip">Skip</button><br />
+<button id="prev">Previous</button><br />
+
+<input type="text" id="start-id" value="2769" /><br />
+<input type="text" id="playlist-length" value="13" /><br />
+<button id="generate-new">Generate new playlist</button>
