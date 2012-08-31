@@ -22,6 +22,12 @@ module StreamRoller
     set :public, 'public/'
     set :sessions, true
 
+    helpers do
+      def server_path
+        "#{request.scheme}://#{request.host_with_port}"
+      end
+    end
+
     def initialize
       super
 

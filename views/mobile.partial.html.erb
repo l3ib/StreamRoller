@@ -3,7 +3,7 @@
 <button id="skip">Skip</button><br />
 <button id="prev">Previous</button><br />
 
-<input type="text" id="start-id" value="2769" /><br />
+<input type="text" id="start-id" value="4184" /><br />
 <input type="text" id="playlist-length" value="13" /><br />
 <button id="generate-new">Generate new playlist</button>
 
@@ -18,8 +18,7 @@
       for(var i = 0; i < length; i++) {
         sublist.push(Number(start) + i);
       }
-      console.log(sublist);
-      playlist = new Playlist(sublist);
+      playlist = new Playlist("<%= server_path %>", sublist);
     };
 
     generateNewPlaylist();
@@ -46,5 +45,12 @@
     });
   };
 
-  $LAB.script("<%= request.scheme %>://<%= request.host_with_port %>/js/new-playlist.js").wait(onReady);
+  var expand = function(libraryName) {
+    return "<%= server_path %>/js/" + libraryName + ".js";
+  }
+
+  $LAB
+    .script(expand("new-player"))
+    .script(expand("new-playlist"))
+    .wait(onReady);
 </script>

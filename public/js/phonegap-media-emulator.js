@@ -29,8 +29,9 @@ Media.prototype.play = function() {
 }
 
 Media.prototype.stop = function() {
-  this.audio.currentTime = 0;
+  console.log("stop called");
   this.audio.pause();
+  this.mediaStatus(4);
 }
 
 Media.prototype.pause = function() {
