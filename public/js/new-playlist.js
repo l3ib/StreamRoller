@@ -73,8 +73,3 @@ Playlist.prototype.playCurrent = function() {
   this.audio = new Media("http://24.212.224.140:4567/get/" + this.list[this.index], this.onSuccess, this.onError, onStatusChange);
   this.audio.play();
 };
-
-var deferred = window.waitingForLibrary["new-playlist"];
-if(deferred) {
-  deferred.resolve();
-}

@@ -46,22 +46,5 @@
     });
   };
 
-  var loadLibrary = function(libraryName) {
-    if(!window.waitingForLibrary) {
-      window.waitingForLibrary = {};
-    }
-
-    var deferred = $.Deferred();
-    window.waitingForLibrary[libraryName] = deferred;
-    $("head").append('<script type="text/javascript" src="<%= request.scheme %>://<%= request.host_with_port %>/js/' + libraryName + '.js"></s' + 'cript>');
-    return deferred;
-  };
-
-  var required = ["new-playlist"];
-
-  var waiters = _(required).map(function(libraryName) {
-    return loadLibrary(libraryName);
-  });
-
-  $.when.apply(this, waiters).done(onReady);
+  $LAB.script("<%= request.scheme %>://<%= request.host_with_port %>/js/new-playlist.js").wait(onReady);
 </script>
