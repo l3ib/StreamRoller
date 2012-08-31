@@ -14,11 +14,11 @@ Player = function(serverAddress) {
 }
 
 Player.prototype.play = function(songId) {
-  if(!this.audio) {
+  if(!this.audio || (songId != this.audio.songId)) {
+    this.stop();
     this.audio = this.makeNewAudio(songId);
   }
   this.audio.play();
-  console.log(this);
 }
 
 Player.prototype.stop = function() {
@@ -57,5 +57,7 @@ Player.prototype.makeNewAudio = function(songId) {
   }
 
   var songPath = this.serverAddress + "/get/" + songId;
-  return new Media(songPath, function(){}, function(){}, onStatusChange);
+  var media = new Media(songPath, function(){}, function(){}, onStatusChange);
+  media.songId = songId;
+  return media;
 }
