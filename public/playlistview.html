@@ -2,7 +2,7 @@
   <strong>Playlist is empty.</strong> Head on over to the browser to add some tunes!
 </div>
 
-<ul ng-show="playlist.length > 0" class="playlist well">
+<ul ng-show="playlist.length > 0" class="playlist well well-small">
   <li
     ng-class="{true: 'active', false:''}[$index == getPlaying()]"
     ng-repeat="song in playlist"
