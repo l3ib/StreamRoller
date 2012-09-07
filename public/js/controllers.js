@@ -34,8 +34,12 @@ function PlayerCtrl($scope, $player, $playlist) {
     $player.changeVolume(amt);
   }
 
-  $scope.getPlayIcon = function() {
-    return $scope.paused ? 'icon-play' : 'icon-pause';
+  $scope.skipSong = function(amt) {
+    $playlist.skipSong(amt);
+  }
+
+  $scope.getPlayString = function() {
+    return $scope.paused ? 'play' : 'pause';
   };
 }
 
@@ -68,8 +72,6 @@ function ArtistDetailCtrl($scope, $http, $routeParams, $playlist, $player) {
   // call in template to queue a song, song is the JSON model
   $scope.queueTrack = function( song ) {
     $playlist.queue( song );
-    // FIXME: just play whatever we click on for now
-    $player.play( song );
     return false;
   }
 

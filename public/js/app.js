@@ -1,4 +1,4 @@
-angular.module('streamroller', ['player']).config(['$routeProvider', function($routeProvider) {
+angular.module('streamroller', ['player','playlist']).config(['$routeProvider', function($routeProvider) {
   $routeProvider.
       when('/playlist', {templateUrl: '/playlistview.html', controller: PlaylistCtrl}).
       when('/:artist', {templateUrl:'/detailview.html', controller: ArtistDetailCtrl}).
@@ -58,20 +58,46 @@ angular.module('player', [], function($provide) {
 
     return srv;
   });
+});
 
+angular.module('playlist', ['player'], function($provide) {
   // playlist module
-  $provide.factory('$playlist', function($rootScope) {
+  $provide.factory('$playlist', function($rootScope, $player) {
     var srv = {};
+    var playing = 0;
 
     srv.playlist = [];
 
-    srv.queue = function( msg ) {
-      srv.playlist.push( msg );
+    srv.queue = function( song ) {
+      srv.playlist.push( song );
+
+      if ( srv.playlist.length == 1 ) {
+        srv.play( 0 );
+      }
     };
+
+    srv.play = function(i) {
+      if ( !srv.playlist[i] ) {
+        return;
+      }
+      srv.playlist[ playing ].playing = false;
+      srv.playlist[i].playing = true;
+      playing = i;
+      $player.play( srv.playlist[i] );
+    }
+
+    srv.skipSong = function(amt) {
+      var i = (playing + amt) % srv.playlist.length;
+      if ( i < 0 ) {
+        i = srv.playlist.length - (Math.abs(i) % srv.playlist.length);
+      }
+      srv.play( i );
+    }
 
     return srv;
   });
 });
+
 
 soundManager.setup({
   url: '/swf/',
