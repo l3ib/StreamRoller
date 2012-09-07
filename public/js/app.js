@@ -23,14 +23,29 @@ angular.module('player', [], function($provide) {
         srv.nowPlaying.destruct();
       }
 
+      //$('.player .progress').addClass('progress-striped active');
       srv.nowPlaying = soundManager.createSound({
         id: 'audio',
         url: '/get/'+ song.id,
         autoLoad: true,
         autoPlay: true,
+        html5Only: true,
         whileplaying: function() {
           // FIXME: bad place to update progress
-          $('.player .progress .bar').css('width', (this.position / this.duration * 100) + '%')
+          var pct = 0;
+          /*if ( this.bytesLoaded != this.bytesTotal ) {
+            pct = this.bytesLoaded / this.bytesTotal * 100;
+          } else {
+            pct = this.position / this.durationEstimate * 100;
+          }*/
+          pct = this.position / this.durationEstimate * 100;
+          $('.player .progress .bar').css('width', pct + '%')
+        },
+        onload: function() {
+          //$('.player .progress').removeClass('progress-striped active');
+        },
+        onfinish: function() {
+          $rootScope.$broadcast('songFinished');
         }
       });
 
@@ -88,7 +103,7 @@ angular.module('playlist', ['player'], function($provide) {
       }
       playing = i;
       $player.play( srv.playlist[i] );
-    }
+    };
 
     srv.skipSong = function(amt) {
       var i = (playing + amt) % srv.playlist.length;
@@ -96,7 +111,11 @@ angular.module('playlist', ['player'], function($provide) {
         i = srv.playlist.length - (Math.abs(i) % srv.playlist.length);
       }
       srv.play( i );
-    }
+    };
+
+    $rootScope.$on('songFinished', function(e) {
+      srv.skipSong(1);
+    });
 
     return srv;
   });
