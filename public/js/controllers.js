@@ -1,11 +1,18 @@
 // controller for tabbed nav
-function NavigationCtrl($scope) {
+function NavigationCtrl($scope, $playlist) {
   var self = this;
 
   // where the browse tab should link to
   $scope.url = '';
   // which button should be hilighted
   $scope.currentNav = 'browse';
+
+  $scope.numSongs = $playlist.playlist.length;
+  $scope.$on('playlistChanged', function(e) {
+    $scope.numSongs = $playlist.playlist.length;
+  });
+  // FIXME: this should work?
+  //$scope.$watch('$playlist.playlist.length', function(){alert('yes')});
 
   // use in the template to determine if section is active
   $scope.getClass = function(name) {
@@ -46,6 +53,14 @@ function PlayerCtrl($scope, $player, $playlist) {
 // controller for playlist tab
 function PlaylistCtrl($scope, $http, $playlist) {
   // FIXME: is it better to use $emit and $handle instead of this?
+  $scope.play = function(i) {
+    $playlist.play(i);
+  };
+
+  $scope.getPlaying = function() {
+    return $playlist.getPlaying();
+  };
+  
   var $navScope = $('.albumList ul.nav').scope();
   $navScope.currentNav = 'playlist';
 

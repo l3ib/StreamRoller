@@ -1,4 +1,12 @@
-Current Playlist:
-<ul>
-  <li ng-repeat="song in playlist">{{song}}</li>
+<div ng-show="playlist.length == 0" class="alert">
+  <strong>Playlist is empty.</strong> Head on over to the browser to add some tunes!
+</div>
+
+<ul ng-show="playlist.length > 0" class="playlist well">
+  <li
+    ng-class="{true: 'active', false:''}[$index == getPlaying()]"
+    ng-repeat="song in playlist"
+    ng-click="play($index)">
+    <img ng-src="/pic/{{song.id}}/32"/> {{song.id3_artist}} - {{song.id3_title}}
+  </li>
 </li>

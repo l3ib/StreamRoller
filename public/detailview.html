@@ -1,5 +1,5 @@
 <div ng-repeat="album in albums" class="album">
-  <b>{{album.name}} ({{album.date}})</b>
+  <b>{{album.name}} <span ng-show="album.date.length">({{album.date}})</span></b>
 
   <div class="row-fluid">
     <div class="span2">
@@ -7,7 +7,12 @@
     </div>
     <div class="span10">
       <ul>
-        <li ng-repeat="song in album.tracks"><a ng-click="queueTrack(song)" data-id="{{song.id}}" href="/get/{{song.id}}">{{song.id3_track}}. {{song.id3_title}}</a></li>
+        <li ng-repeat="song in album.tracks">
+          <a ng-click="queueTrack(song)" data-id="{{song.id}}" href="/get/{{song.id}}">
+            <span ng-show="song.id3_track != undefined">{{song.id3_track}}.</span>
+            {{song.id3_title}}
+          </a>
+        </li>
       </ul>
     </div>
   </div>

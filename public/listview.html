@@ -1,5 +1,5 @@
   <input ng-model="query" placeholder="Search artists and albums..."/>
-  <ul ng-controller="ArtistListCtrl">
+  <ul class="nav nav-list" ng-controller="ArtistListCtrl">
 
     <li ng-repeat="artist in artists | filter:query ">
       <a href="#/{{artist.name}}/">{{artist.name}}</a>

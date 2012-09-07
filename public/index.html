@@ -39,6 +39,14 @@
         height: 12px;
       }
 
+      .player .progress .bar {
+          -webkit-transition: none;
+          -moz-transition: none;
+          -ms-transition: none;
+          -o-transition: none;
+          transition: none;
+      }
+      
       body {
         margin-top: 8em;
       }
@@ -67,13 +75,18 @@
         margin-bottom: 1em;
       }
 
-      .player .progress .bar {
-          -webkit-transition: none;
-          -moz-transition: none;
-          -ms-transition: none;
-          -o-transition: none;
-          transition: none;
-      }​
+      .playlist li {
+        cursor: pointer;
+        margin-bottom: 0.25em;
+      }
+
+      .playlist li.active {
+        background-color: white;
+      }
+
+      .playlist li:hover {
+        background-color: #ddd;
+      }
     </style>
   </head>
   <body>
@@ -83,8 +96,8 @@
         <img ng-src="/pic/{{song.id}}/75"/>
         <div style="display: inline-block;">
           <div><b>{{song.id3_title}}</b></div>
-          <div>by {{song.id3_artist}}</div>
-          <div>on {{song.id3_album}}</div>
+          <div>by <a ng-href="#/{{song.id3_artist}}/">{{song.id3_artist}}</a></div>
+          <div>on <a ng-href="#/{{song.id3_artist}}/{{song.id3_album}}">{{song.id3_album}}</a></div>
         </div>
       </div>
 
@@ -114,7 +127,8 @@
 
           <ul ng-controller="NavigationCtrl" class="nav nav-pills">
             <li ng-class="getClass('browse')"><a href="#{{url}}">Browser</a></li>
-            <li ng-class="getClass('playlist')"><a href="#/playlist">Playlist</a></li>
+            <li ng-class="getClass('playlist')"><a href="#/playlist">Playlist <span class="badge badge-info">{{numSongs}}</span></span>
+</a></li>
           </ul>
 
           <div ng-view></div>

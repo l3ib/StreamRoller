@@ -68,20 +68,24 @@ angular.module('playlist', ['player'], function($provide) {
 
     srv.playlist = [];
 
+    srv.getPlaying = function() {
+      return playing;
+    };
+
     srv.queue = function( song ) {
       srv.playlist.push( song );
+      $rootScope.$broadcast('playlistChanged');
 
       if ( srv.playlist.length == 1 ) {
         srv.play( 0 );
       }
+
     };
 
     srv.play = function(i) {
       if ( !srv.playlist[i] ) {
         return;
       }
-      srv.playlist[ playing ].playing = false;
-      srv.playlist[i].playing = true;
       playing = i;
       $player.play( srv.playlist[i] );
     }
