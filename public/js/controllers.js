@@ -52,7 +52,6 @@ function PlayerCtrl($scope, $player, $playlist) {
 
 // controller for playlist tab
 function PlaylistCtrl($scope, $http, $playlist) {
-  // FIXME: is it better to use $emit and $handle instead of this?
   $scope.play = function(i) {
     $playlist.play(i);
   };
@@ -61,6 +60,16 @@ function PlaylistCtrl($scope, $http, $playlist) {
     return $playlist.getPlaying();
   };
 
+  $scope.clear = function() {
+    $playlist.clear();
+    $scope.playlist = $playlist.playlist;
+  };
+
+  $scope.generateM3U = function() {
+    $playlist.generateM3U();
+  };
+
+  // FIXME: is it better to use $emit and $handle instead of this?
   var $navScope = $('.albumList ul.nav').scope();
   $navScope.currentNav = 'playlist';
 
@@ -69,7 +78,20 @@ function PlaylistCtrl($scope, $http, $playlist) {
 }
 
 // controller for left pane artist -> album list
-function ArtistListCtrl($scope, $http) {
+function ArtistListCtrl($scope, $http, $routeParams) {
+  $scope.getClass = function(name, isAlbum) {
+    if ($routeParams.album) {
+      if ( isAlbum ) {
+        console.log('yes');
+        return $routeParams.album == name ? 'active': '';
+      } else {
+        return '';
+      }
+    } else if ($routeParams.artist && !isAlbum) {
+      return $routeParams.artist == name ? 'active' : '';
+    }
+  };
+
   $http.get('/artists/').success( function(data) {
     // transform what we receive from the server
     // array of objects, name is artist name, albums is list of strings

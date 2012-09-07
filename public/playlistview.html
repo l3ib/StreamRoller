@@ -2,11 +2,18 @@
   <strong>Playlist is empty.</strong> Head on over to the browser to add some tunes!
 </div>
 
-<ul ng-show="playlist.length > 0" class="playlist well well-small">
-  <li
-    ng-class="{true: 'active', false:''}[$index == getPlaying()]"
-    ng-repeat="song in playlist"
-    ng-click="play($index)">
-    <img ng-src="/pic/{{song.id}}/32"/> {{song.id3_artist}} - {{song.id3_title}}
+<div class="playlist well well-small" ng-show="playlist.length > 0">
+  <div class="buttons">
+    <button class="btn" ng-click="generateM3U()">Generate M3U Playlist</button>
+    <button class="btn" ng-click="clear()">Clear Playlist</button>
+  </div>
+
+  <ul>
+    <li
+      ng-class="{true: 'active', false:''}[$index == getPlaying()]"
+      ng-repeat="song in playlist"
+      ng-click="play($index)">
+      <img ng-src="/pic/{{song.id}}/32"/> {{song.id3_artist}} - {{song.id3_title}}
+    </li>
   </li>
-</li>
+</div>
