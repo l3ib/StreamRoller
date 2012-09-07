@@ -76,9 +76,29 @@
         margin-bottom: 1em;
       }
 
+      .album .title {
+        font-weight: bold;
+        margin: 1px 0;
+      }
+
+      .album button.queueAlbum {
+        visibility: hidden;
+        margin: 5px auto;
+        width: 100%;
+      }
+
+      .album:hover button.queueAlbum {
+        visibility: visible;
+      }
+
       .playlist li {
         cursor: pointer;
         margin-bottom: 0.25em;
+      }
+
+      .playlist li img {
+        width: 32px;
+        height: 32px;
       }
 
       .playlist li.active {

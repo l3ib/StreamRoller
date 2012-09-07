@@ -60,7 +60,7 @@ function PlaylistCtrl($scope, $http, $playlist) {
   $scope.getPlaying = function() {
     return $playlist.getPlaying();
   };
-  
+
   var $navScope = $('.albumList ul.nav').scope();
   $navScope.currentNav = 'playlist';
 
@@ -87,8 +87,13 @@ function ArtistDetailCtrl($scope, $http, $routeParams, $playlist, $player) {
   // call in template to queue a song, song is the JSON model
   $scope.queueTrack = function( song ) {
     $playlist.queue( song );
-    return false;
-  }
+  };
+
+  $scope.queueAlbum = function( album ) {
+    for ( var i = 0; i < album.tracks.length; i++ ) {
+      $playlist.queue( album.tracks[i] );
+    }
+  };
 
   // FIXME: is it better to use $emit and $handle instead of this?
   var $navScope = $('.albumList ul.nav').scope();

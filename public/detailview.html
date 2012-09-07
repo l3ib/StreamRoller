@@ -1,9 +1,9 @@
 <div ng-repeat="album in albums" class="album">
-  <b>{{album.name}} <span ng-show="album.date.length">({{album.date}})</span></b>
-
+  <span class="title">{{album.name}}</span> <span ng-show="album.date.length">({{album.date}})</span> 
   <div class="row-fluid">
     <div class="span2">
       <img src="/pic/{{album.art}}/175"/>
+      <button class="queueAlbum btn btn-mini btn-primary" ng-click="queueAlbum(album)">Add Album</button>
     </div>
     <div class="span10">
       <ul>
