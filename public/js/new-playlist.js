@@ -22,8 +22,9 @@ Playlist.prototype.next = function() {
 };
 
 Playlist.prototype.skip = function() {
+  var that = this;
   this.player.manually(function() {
-    this.next();
+    that.next();
   });
 }
 
