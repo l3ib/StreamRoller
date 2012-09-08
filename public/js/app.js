@@ -159,4 +159,10 @@ jQuery( function($) {
   $('.albumList').on('click', '.album ul li a', function(e) {
     return false;
   });
+
+  $(window).resize(function() {
+    var $artistNav = $('.artistList ul.well');
+    $artistNav.height( $(window).height() - 190 +'px');
+  });
+  setTimeout( function(){ $(window).resize(); }, 100 );
 });
