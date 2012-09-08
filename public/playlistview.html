@@ -10,7 +10,7 @@
 
   <ul>
     <li
-      ng-class="{true: 'active', false:''}[$index == getPlaying()]"
+      ng-class="{true: 'active', false:''}[$index == playing]"
       ng-repeat="song in playlist"
       ng-click="play($index)">
       <img ng-src="/pic/{{song.id}}/32"/> {{song.id3_artist}} - {{song.id3_title}}

@@ -143,11 +143,11 @@
           <button ng-click="changeVolume(10)" class="btn btn-inverse"><i class="icon-volume-up icon-white"></i></button>
         </div>
         <br/>
-        <span class="timeElapsed">0:00</span>
+        <span class="timeElapsed">{{timeElapsed}}</span>
         <div class="progress">
-          <div class="bar"></div>
+          <div ng-style="{width: progress+'%'}" class="bar"></div>
         </div>
-        <span class="timeLeft">-0:00</span>
+        <span class="timeLeft">-{{timeLeft}}</span>
       </div>
     </div>
 

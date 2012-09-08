@@ -16,6 +16,9 @@ angular.module('player', [], function($provide) {
     srv.nowPlaying = undefined;
     srv.song = undefined;
     srv.paused = true;
+    srv.progress = 0;
+    srv.timeElapsed = '0:00';
+    srv.timeLeft = '0:00';
 
     // destroy the current handle and start playing the requested song
     // song is a JSON object containing all the song info
@@ -33,46 +36,39 @@ angular.module('player', [], function($provide) {
         html5Only: true,
         volume: volume,
         whileplaying: function() {
-          // FIXME: bad place to update progress
-          var pct = 0;
-          /*if ( this.bytesLoaded != this.bytesTotal ) {
-            pct = this.bytesLoaded / this.bytesTotal * 100;
-          } else {
-            pct = this.position / this.durationEstimate * 100;
-          }*/
-          pct = this.position / this.durationEstimate * 100;
-          $('.player .progress .bar').css('width', pct + '%');
-
-          var val = this.position/1000;
-          var min = Math.floor(val / 60);
-          var sec = Math.floor(val % 60);
-          $('.player .timeElapsed').text(min +':'+ (sec<10?'0':'') + sec);
-
-          var val = (this.durationEstimate-this.position)/1000
-          var min = Math.floor(val / 60);
-          var sec = Math.floor(val % 60);
-          $('.player .timeLeft').text('-'+ min +':'+ (sec<10?'0':'') + sec);
-        },
-        onload: function() {
-          //$('.player .progress').removeClass('progress-striped active');
+          srv.progress = this.position / this.durationEstimate * 100;
+          srv.setTimeElapsed( this.position );
+          srv.setTimeLeft( this.position, this.durationEstimate );
+          $rootScope.$apply();
         },
         onfinish: function() {
           $rootScope.$broadcast('songFinished');
+          $rootScope.$apply();
         }
       });
 
       srv.song = song;
       srv.paused = false;
+    };
 
-      $rootScope.$broadcast('playerChanged');
+    srv.setTimeElapsed = function( msec ) {
+      var val = msec/1000;
+      var min = Math.floor(val / 60);
+      var sec = Math.floor(val % 60);
+      srv.timeElapsed = min +':'+ (sec<10?'0':'') + sec;
+    };
 
+    srv.setTimeLeft = function( msec, length ) {
+      var val = (length-msec)/1000;
+      var min = Math.floor(val / 60);
+      var sec = Math.floor(val % 60);
+      srv.timeLeft = min +':'+ (sec<10?'0':'') + sec;
     };
 
     srv.togglePause = function() {
       if ( srv.nowPlaying ) {
         srv.nowPlaying.togglePause();
         srv.paused = srv.nowPlaying.paused;
-        $rootScope.$broadcast('pauseChanged');
       }
     };
 
@@ -91,34 +87,28 @@ angular.module('playlist', ['player'], function($provide) {
   // playlist module
   $provide.factory('$playlist', function($rootScope, $player) {
     var srv = {};
-    var playing = 0;
 
     srv.playlist = [];
-
-    srv.getPlaying = function() {
-      return playing;
-    };
+    srv.playing = 0;
 
     srv.queue = function( song ) {
       srv.playlist.push( song );
-      $rootScope.$broadcast('playlistChanged');
 
       if ( srv.playlist.length == 1 ) {
         srv.play( 0 );
       }
-
     };
 
     srv.play = function(i) {
       if ( !srv.playlist[i] ) {
         return;
       }
-      playing = i;
+      srv.playing = i;
       $player.play( srv.playlist[i] );
     };
 
     srv.skipSong = function(amt) {
-      var i = (playing + amt) % srv.playlist.length;
+      var i = (srv.playing + amt) % srv.playlist.length;
       if ( i < 0 ) {
         i = srv.playlist.length - (Math.abs(i) % srv.playlist.length);
       }
@@ -127,7 +117,6 @@ angular.module('playlist', ['player'], function($provide) {
 
     srv.clear = function() {
       srv.playlist = [];
-      $rootScope.$broadcast('playlistChanged');
     };
 
     srv.generateM3U = function() {

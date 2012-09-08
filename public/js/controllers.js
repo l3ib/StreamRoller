@@ -7,12 +7,11 @@ function NavigationCtrl($scope, $playlist) {
   // which button should be hilighted
   $scope.currentNav = 'browse';
 
-  $scope.numSongs = $playlist.playlist.length;
-  $scope.$on('playlistChanged', function(e) {
+  // update playlist badge
+  $scope.playlist = $playlist;
+  $scope.$watch("playlist.playlist.length", function() {
     $scope.numSongs = $playlist.playlist.length;
   });
-  // FIXME: this should work?
-  //$scope.$watch('$playlist.playlist.length', function(){alert('yes')});
 
   // use in the template to determine if section is active
   $scope.getClass = function(name) {
@@ -22,19 +21,30 @@ function NavigationCtrl($scope, $playlist) {
 
 // controller for player at top of page
 function PlayerCtrl($scope, $player, $playlist) {
-  // FIXME: should be able to do this without the broadcast, i think?
-  $scope.$on('pauseChanged', function(e) {
+  $scope.player = $player;
+
+  $scope.$watch("player.paused", function() {
     $scope.paused = $player.paused;
   });
 
-  $scope.$on('playerChanged', function(e) {
+  $scope.$watch("player.song", function() {
     $scope.song = $player.song;
-    $scope.paused = $player.paused;
+  });
+
+  $scope.$watch("player.progress", function() {
+    $scope.progress = $player.progress;
+  })
+
+  $scope.$watch("player.timeElapsed", function() {
+    $scope.timeElapsed = $player.timeElapsed;
+  });
+
+  $scope.$watch("player.timeLeft", function() {
+    $scope.timeLeft = $player.timeLeft;
   });
 
   $scope.togglePause = function() {
     $player.togglePause();
-    $scope.paused = $player.paused;
   };
 
   $scope.changeVolume = function(amt) {
@@ -52,12 +62,10 @@ function PlayerCtrl($scope, $player, $playlist) {
 
 // controller for playlist tab
 function PlaylistCtrl($scope, $http, $playlist) {
+  $scope.PlaylistService = $playlist;
+
   $scope.play = function(i) {
     $playlist.play(i);
-  };
-
-  $scope.getPlaying = function() {
-    return $playlist.getPlaying();
   };
 
   $scope.clear = function() {
@@ -68,6 +76,10 @@ function PlaylistCtrl($scope, $http, $playlist) {
   $scope.generateM3U = function() {
     $playlist.generateM3U();
   };
+
+  $scope.$watch("PlaylistService.playing", function() {
+    $scope.playing = $scope.PlaylistService.playing;
+  })
 
   // FIXME: is it better to use $emit and $handle instead of this?
   var $navScope = $('.albumList ul.nav').scope();
@@ -82,7 +94,6 @@ function ArtistListCtrl($scope, $http, $routeParams) {
   $scope.getClass = function(name, isAlbum) {
     if ($routeParams.album) {
       if ( isAlbum ) {
-        console.log('yes');
         return $routeParams.album == name ? 'active': '';
       } else {
         return '';
