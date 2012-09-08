@@ -117,7 +117,7 @@ module StreamRoller
           pic = get_pic(id, size)
           return pic if pic
           #else
-          redirect '/placeholder.png'
+          redirect '/img/placeholder.png'
         rescue
           puts "Error sending album art: #{id} #{$!}"
         end
