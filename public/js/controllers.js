@@ -7,6 +7,11 @@ function NavigationCtrl($scope, $playlist) {
   // which button should be hilighted
   $scope.currentNav = 'browse';
 
+  $scope.$on('navChanged', function(e, o) {
+    if ( o.url ) { $scope.url = o.url; }
+    if ( o.section ) { $scope.currentNav = o.section };
+  });
+
   // update playlist badge
   $scope.playlist = $playlist;
   $scope.$watch("playlist.playlist.length", function() {
@@ -61,7 +66,7 @@ function PlayerCtrl($scope, $player, $playlist) {
 }
 
 // controller for playlist tab
-function PlaylistCtrl($scope, $http, $playlist) {
+function PlaylistCtrl($rootScope, $scope, $http, $playlist) {
   $scope.PlaylistService = $playlist;
 
   $scope.play = function(i) {
@@ -81,9 +86,7 @@ function PlaylistCtrl($scope, $http, $playlist) {
     $scope.playing = $scope.PlaylistService.playing;
   })
 
-  // FIXME: is it better to use $emit and $handle instead of this?
-  var $navScope = $('.albumList ul.nav').scope();
-  $navScope.currentNav = 'playlist';
+  $rootScope.$broadcast('navChanged', {section: 'playlist'});
 
   // copy over playlist from playlist module
   $scope.playlist = $playlist.playlist;
@@ -115,7 +118,7 @@ function ArtistListCtrl($scope, $http, $routeParams) {
 }
 
 // controller for right pane containing a number of albums with tracks inside
-function ArtistDetailCtrl($scope, $http, $routeParams, $playlist, $player) {
+function ArtistDetailCtrl($rootScope, $scope, $http, $routeParams, $playlist, $player) {
 
   // call in template to queue a song, song is the JSON model
   $scope.queueTrack = function( song ) {
@@ -128,10 +131,6 @@ function ArtistDetailCtrl($scope, $http, $routeParams, $playlist, $player) {
     }
   };
 
-  // FIXME: is it better to use $emit and $handle instead of this?
-  var $navScope = $('.albumList ul.nav').scope();
-  $navScope.currentNav = 'browse';
-
   // if the url doesn't have /:artist/
   if ( !$routeParams.artist ) {
     return;
@@ -141,9 +140,7 @@ function ArtistDetailCtrl($scope, $http, $routeParams, $playlist, $player) {
   var url = '/' + $routeParams.artist;
   if ( $routeParams.album ) url += '/'+ $routeParams.album;
 
-  // FIXME: is it better to use $emit and $handle instead of this?
-  var $navScope = $('.albumList ul.nav').scope();
-  $navScope.url = url;
+  $rootScope.$broadcast('navChanged', {section: 'browse', url: url});
 
   // url the actual json call is made at
   url = '/browse' + url;
