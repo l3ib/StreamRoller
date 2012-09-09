@@ -12,13 +12,12 @@ angular.module('player', [], function($provide) {
     var srv = {};
     var volume = 50;
 
-    // handle to currently playing soundManager handle
-    srv.nowPlaying = undefined;
-    srv.song = undefined;
-    srv.paused = true;
-    srv.progress = 0;
-    srv.timeElapsed = '0:00';
-    srv.timeLeft = '0:00';
+    srv.nowPlaying = undefined;     // handle to currently playing soundManager handle
+    srv.song = undefined;           // song object for currently playing song
+    srv.paused = true;              // is the player paused
+    srv.progress = 0;               // float 0-100 for song progress
+    srv.timeElapsed = '0:00';       // formatted string for song position
+    srv.timeLeft = '0:00';          // formatted string for song time left
 
     // destroy the current handle and start playing the requested song
     // song is a JSON object containing all the song info
@@ -27,7 +26,6 @@ angular.module('player', [], function($provide) {
         srv.nowPlaying.destruct();
       }
 
-      //$('.player .progress').addClass('progress-striped active');
       srv.nowPlaying = soundManager.createSound({
         id: 'audio',
         url: '/get/'+ song.id,
@@ -36,12 +34,14 @@ angular.module('player', [], function($provide) {
         html5Only: true,
         volume: volume,
         whileplaying: function() {
+          // update player stats, call $apply since we're not in angular land
           srv.progress = this.position / this.durationEstimate * 100;
           srv.setTimeElapsed( this.position );
           srv.setTimeLeft( this.position, this.durationEstimate );
           $rootScope.$apply();
         },
         onfinish: function() {
+          // just send out an event and let the playlist queue up the next song
           $rootScope.$broadcast('songFinished');
           $rootScope.$apply();
         }
@@ -88,9 +88,10 @@ angular.module('playlist', ['player'], function($provide) {
   $provide.factory('$playlist', function($rootScope, $player) {
     var srv = {};
 
-    srv.playlist = [];
-    srv.playing = 0;
+    srv.playlist = [];    // list of song objects in the playlist
+    srv.playing = 0;      // array index of currently playing song
 
+    // add a song to the end of the playlist
     srv.queue = function( song ) {
       srv.playlist.push( song );
 
@@ -99,6 +100,8 @@ angular.module('playlist', ['player'], function($provide) {
       }
     };
 
+    // play a song from a playlist with the given index
+    // responsible for calling the player service
     srv.play = function(i) {
       if ( !srv.playlist[i] ) {
         return;
@@ -107,6 +110,7 @@ angular.module('playlist', ['player'], function($provide) {
       $player.play( srv.playlist[i] );
     };
 
+    // skip amt places in the playlist, wrap around in both directions
     srv.skipSong = function(amt) {
       var i = (srv.playing + amt) % srv.playlist.length;
       if ( i < 0 ) {
@@ -119,6 +123,8 @@ angular.module('playlist', ['player'], function($provide) {
       srv.playlist = [];
     };
 
+    // post to /m3u endpoint which basically serves back what we send it
+    // with an m3u of the current playlist
     srv.generateM3U = function() {
       var m3u = ['#EXTM3U'];
       for (var i=0; srv.playlist[i]; i++) {
@@ -135,6 +141,7 @@ angular.module('playlist', ['player'], function($provide) {
       });
     };
     
+    // dispatched by the player, play the next song in the playlist
     $rootScope.$on('songFinished', function(e) {
       srv.skipSong(1);
     });
@@ -143,7 +150,7 @@ angular.module('playlist', ['player'], function($provide) {
   });
 });
 
-
+// soundmanager first-time init
 soundManager.setup({
   url: '/swf/',
   onready: function() {
@@ -154,12 +161,14 @@ soundManager.setup({
   }
 });
 
-// FIXME: need to kill the default beavhior here
 jQuery( function($) {
+  // FIXME: need to kill the default beavhior of song clicks here
+  // we keep the link href so you can right click -> save songs
   $('.albumList').on('click', '.album ul li a', function(e) {
     return false;
   });
 
+  // bit of a hack, set the artist list size ourselves
   $(window).resize(function() {
     var $artistNav = $('.artistList ul.well');
     $artistNav.height( $(window).height() - 190 +'px');

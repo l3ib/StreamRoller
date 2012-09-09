@@ -1,0 +1,116 @@
+.player {
+  background-color: black;
+  height: 100px;
+  margin: 0;
+  text-align: center;
+}
+
+.player .nowPlaying {
+  color: #eee;
+  margin: 13px 0 0 13px;
+  text-align: left;
+  height: 80px;
+  overflow: hidden;
+}
+
+.player .nowPlaying img {
+  float: left;
+  margin: 0 8px;
+}
+
+.player .controls {
+  margin-top: 23px;
+}
+
+.player .controls .btn-group {
+  margin: 0;
+  display: inline-block;
+}
+
+.player .controls .progress {
+  margin: 8px 0 0 0;
+  display: inline-block;
+  width: 65%;
+  height: 12px;
+}
+
+.player .progress .bar {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -ms-transition: none;
+    -o-transition: none;
+    transition: none;
+}
+
+body {
+  margin-top: 8em;
+  overflow-y: scroll;
+}
+
+.artistList {
+  position: fixed;
+}
+
+.artistList ul.well {
+  overflow-y: scroll;
+  height: 150px;
+}
+
+.artistList input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 15px 0 15px 10px;
+  margin-top: 1px;
+}
+
+.albumList {
+}
+
+.albumList ul {
+  list-style-type: none;
+}
+
+.album {
+  margin-bottom: 1em;
+}
+
+.album .title {
+  font-weight: bold;
+  margin: 1px 0;
+}
+
+.album button.queueAlbum {
+  visibility: hidden;
+  margin: 5px auto;
+  width: 100%;
+}
+
+.album:hover button.queueAlbum {
+  visibility: visible;
+}
+
+.playlist .buttons {
+  margin-bottom: 1em;
+}
+
+.playlist ul {
+  margin-left: 0;
+}
+
+.playlist li {
+  cursor: pointer;
+  margin-bottom: 0.25em;
+}
+
+.playlist li img {
+  width: 32px;
+  height: 32px;
+}
+
+.playlist li.active {
+  background-color: white;
+}
+
+.playlist li:hover {
+  background-color: #ddd;
+}

@@ -3,174 +3,29 @@
   <head>
     <title>StreamRoller</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <style type="text/css">
-      .player {
-        background-color: black;
-        height: 100px;
-        margin: 0;
-        text-align: center;
-      }
-
-      .player .nowPlaying {
-        color: #eee;
-        margin: 13px 0 0 13px;
-        text-align: left;
-        height: 80px;
-        overflow: hidden;
-      }
-
-      .player .nowPlaying img {
-        float: left;
-        margin: 0 8px;
-      }
-
-      .player .controls {
-        margin-top: 23px;
-      }
-
-      .player .controls .btn-group {
-        margin: 0;
-        display: inline-block;
-      }
-
-      .player .controls .progress {
-        margin: 8px 0 0 0;
-        display: inline-block;
-        width: 65%;
-        height: 12px;
-      }
-
-      .player .progress .bar {
-          -webkit-transition: none;
-          -moz-transition: none;
-          -ms-transition: none;
-          -o-transition: none;
-          transition: none;
-      }
-
-      body {
-        margin-top: 8em;
-        overflow-y: scroll;
-      }
-
-      .artistList {
-        position: fixed;
-      }
-
-      .artistList ul.well {
-        overflow-y: scroll;
-        height: 150px;
-      }
-
-      .artistList input {
-        width: 100%;
-        box-sizing: border-box;
-        padding: 15px 0 15px 10px;
-        margin-top: 1px;
-      }
-
-      .albumList {
-      }
-
-      .albumList ul {
-        list-style-type: none;
-      }
-
-      .album {
-        margin-bottom: 1em;
-      }
-
-      .album .title {
-        font-weight: bold;
-        margin: 1px 0;
-      }
-
-      .album button.queueAlbum {
-        visibility: hidden;
-        margin: 5px auto;
-        width: 100%;
-      }
-
-      .album:hover button.queueAlbum {
-        visibility: visible;
-      }
-
-      .playlist .buttons {
-        margin-bottom: 1em;
-      }
-
-      .playlist ul {
-        margin-left: 0;
-      }
-
-      .playlist li {
-        cursor: pointer;
-        margin-bottom: 0.25em;
-      }
-
-      .playlist li img {
-        width: 32px;
-        height: 32px;
-      }
-
-      .playlist li.active {
-        background-color: white;
-      }
-
-      .playlist li:hover {
-        background-color: #ddd;
-      }
-    </style>
+    <link href="css/streamroller.css" rel="stylesheet">
   </head>
   <body>
 
     <div class="player navbar navbar-fixed-top row-fluid" ng-controller="PlayerCtrl">
-      <div class="span4 nowPlaying">
-        <span ng-show="song.id">
-          <a href="#/playlist/"><img ng-src="/pic/{{song.id}}/75"/></a>
-          <div>
-            <div><b>{{song.id3_title}}</b></div>
-            <div>by <a ng-href="#/{{song.id3_artist}}/">{{song.id3_artist}}</a></div>
-            <div>on <a ng-href="#/{{song.id3_artist}}/{{song.id3_album}}">{{song.id3_album}}</a></div>
-          </div>
-        </span>
-      </div>
-
-      <div class="span4 controls">
-        <div class="btn-group">
-          <button ng-click="skipSong(-1)" class="btn btn-inverse"><i class="icon-fast-backward icon-white"></i></button>
-          <button ng-click="togglePause()" class="btn btn-inverse"><i ng-class="'icon-'+getPlayString()" class="icon-white"></i></button>
-          <button ng-click="skipSong(1)" class="btn btn-inverse"><i class="icon-fast-forward icon-white"></i></button>
-        </div>
-        <div class="btn-group">
-          <button ng-click="changeVolume(-10)" class="btn btn-inverse"><i class="icon-volume-down icon-white"></i></button>
-          <button ng-click="changeVolume(10)" class="btn btn-inverse"><i class="icon-volume-up icon-white"></i></button>
-        </div>
-        <br/>
-        <span class="timeElapsed">{{timeElapsed}}</span>
-        <div class="progress">
-          <div ng-style="{width: progress+'%'}" class="bar"></div>
-        </div>
-        <span class="timeLeft">-{{timeLeft}}</span>
-      </div>
+      <ng-include src="'player.html'"/>
     </div>
 
     <div class="container-fluid">
       <div class="row-fluid">
-        <div class="span3 artistList">
-          <ng-include src="'listview.html'"></ng-include>
-        </div>
-        <div class="offset3 span8 albumList">
 
+        <div class="span3 artistList">
+          <ng-include src="'listview.html'"/>
+        </div>
+
+        <div class="offset3 span8 albumList">
           <ul ng-controller="NavigationCtrl" class="nav nav-pills">
             <li ng-class="getClass('browse')"><a href="#{{url}}">Browser</a></li>
-            <li ng-class="getClass('playlist')"><a href="#/playlist">Playlist <span class="badge badge-info">{{numSongs}}</span></span>
-</a></li>
+            <li ng-class="getClass('playlist')"><a href="#/playlist">Playlist <span class="badge badge-info">{{numSongs}}</span></a></li>
           </ul>
-
           <div ng-view></div>
-
         </div>
+
       </div>
     </div>
   
