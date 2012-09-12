@@ -1,18 +1,18 @@
-<div ng-show="playlist.length == 0" class="alert">
+<div ng-show="playlist.playlist.length == 0" class="alert">
   <strong>Playlist is empty.</strong> Head on over to the browser to add some tunes!
 </div>
 
-<div class="playlist well well-small" ng-show="playlist.length > 0">
+<div class="playlist well well-small" ng-show="playlist.playlist.length > 0">
   <div class="buttons">
-    <button class="btn" ng-click="PlaylistService.generateM3U()">Generate M3U Playlist</button>
-    <button class="btn" ng-click="PlaylistService.clear()">Clear Playlist</button>
+    <button class="btn" ng-click="playlist.generateM3U()">Generate M3U Playlist</button>
+    <button class="btn" ng-click="playlist.clear()">Clear Playlist</button>
   </div>
 
   <ul>
     <li
-      ng-class="{true: 'active', false:''}[$index == playing]"
-      ng-repeat="song in playlist"
-      ng-click="PlaylistService.play($index)">
+      ng-class="{true: 'active', false:''}[$index == playlist.playing]"
+      ng-repeat="song in playlist.playlist"
+      ng-click="playlist.play($index)">
       <img ng-src="/pic/{{song.id}}/32"/> {{song.id3_artist}} - {{song.id3_title}}
     </li>
   </li>

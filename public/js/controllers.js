@@ -4,18 +4,13 @@ function NavigationCtrl($scope, $playlist) {
 
   $scope.url = '';                  // where the browse tab should link to
   $scope.currentNav = 'browse';     // which button should be hilighted
-  $scope.playlist = $playlist;      // playlist service so we can $watch on it
+  $scope.playlist = $playlist;      // playlist service for view
 
 
   // controllers wishing to change the nav broadcast on $rootScope
   $scope.$on('navChanged', function(e, o) {
     if ( o.url ) { $scope.url = o.url; }
     if ( o.section ) { $scope.currentNav = o.section };
-  });
-
-  // update playlist badge when playlist length changes
-  $scope.$watch("playlist.playlist.length", function() {
-    $scope.numSongs = $playlist.playlist.length;
   });
 
   // use in the template to determine if section is active
@@ -29,48 +24,15 @@ function PlayerCtrl($scope, $player, $playlist) {
   $scope.player = $player;
   $scope.playlist = $playlist;
 
-  // two-way binding for if player is paused
-  $scope.$watch("player.paused", function() {
-    $scope.paused = $player.paused;
-  });
-
-  // two-way binding for current song object
-  $scope.$watch("player.song", function() {
-    $scope.song = $player.song;
-  });
-
-  // two-way binding for properties set by audio player
-  $scope.$watch("player.progress", function() {
-    $scope.progress = $player.progress;
-  })
-
-  $scope.$watch("player.timeElapsed", function() {
-    $scope.timeElapsed = $player.timeElapsed;
-  });
-
-  $scope.$watch("player.timeLeft", function() {
-    $scope.timeLeft = $player.timeLeft;
-  });
-
   // used to set the proper icon
   $scope.getPlayString = function() {
-    return $scope.paused ? 'play' : 'pause';
+    return $player.paused ? 'play' : 'pause';
   };
 }
 
 // controller for playlist tab
 function PlaylistCtrl($rootScope, $scope, $http, $playlist) {
-  $scope.PlaylistService = $playlist;     // expose the playlist service to the scope for $watch
-  $scope.playlist = $playlist.playlist;   // playlist array containing song objects
-
-  $scope.$watch("PlaylistService.playlist", function() {
-    $scope.playlist = $scope.PlaylistService.playlist;
-  });
-
-  // need to update hilight if we're sitting on the playlist tab
-  $scope.$watch("PlaylistService.playing", function() {
-    $scope.playing = $scope.PlaylistService.playing;
-  });
+  $scope.playlist = $playlist;     // expose the playlist service to the view
 
   // indicate to navigation controller where we are
   $rootScope.$broadcast('navChanged', {section: 'playlist'});

@@ -1,10 +1,10 @@
       <div class="span4 nowPlaying">
-        <span ng-show="song.id">
-          <a href="#/playlist/"><img ng-src="/pic/{{song.id}}/75"/></a>
+        <span ng-show="player.song.id">
+          <a href="#/playlist/"><img ng-src="/pic/{{player.song.id}}/75"/></a>
           <div>
-            <div><b>{{song.id3_title}}</b></div>
-            <div>by <a ng-href="#/{{song.id3_artist}}/">{{song.id3_artist}}</a></div>
-            <div>on <a ng-href="#/{{song.id3_artist}}/{{song.id3_album}}">{{song.id3_album}}</a></div>
+            <div><b>{{player.song.id3_title}}</b></div>
+            <div>by <a ng-href="#/{{player.song.id3_artist}}/">{{player.song.id3_artist}}</a></div>
+            <div>on <a ng-href="#/{{player.song.id3_artist}}/{{player.song.id3_album}}">{{player.song.id3_album}}</a></div>
           </div>
         </span>
       </div>
@@ -20,9 +20,9 @@
           <button ng-click="player.changeVolume(10)" class="btn btn-inverse"><i class="icon-volume-up icon-white"></i></button>
         </div>
         <br/>
-        <span class="timeElapsed">{{timeElapsed}}</span>
+        <span class="timeElapsed">{{player.timeElapsed}}</span>
         <div class="progress">
-          <div ng-style="{width: progress+'%'}" class="bar"></div>
+          <div ng-style="{width: player.progress+'%'}" class="bar"></div>
         </div>
-        <span class="timeLeft">-{{timeLeft}}</span>
+        <span class="timeLeft">-{{player.timeLeft}}</span>
       </div>
