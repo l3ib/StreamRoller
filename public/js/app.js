@@ -173,5 +173,5 @@ jQuery( function($) {
     var $artistNav = $('.artistList ul.well');
     $artistNav.height( $(window).height() - 190 +'px');
   });
-  setTimeout( function(){ $(window).resize(); }, 100 );
+  setTimeout( function(){ $(window).resize(); }, 500 );
 });

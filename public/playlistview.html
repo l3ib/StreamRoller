@@ -4,15 +4,15 @@
 
 <div class="playlist well well-small" ng-show="playlist.length > 0">
   <div class="buttons">
-    <button class="btn" ng-click="generateM3U()">Generate M3U Playlist</button>
-    <button class="btn" ng-click="clear()">Clear Playlist</button>
+    <button class="btn" ng-click="PlaylistService.generateM3U()">Generate M3U Playlist</button>
+    <button class="btn" ng-click="PlaylistService.clear()">Clear Playlist</button>
   </div>
 
   <ul>
     <li
       ng-class="{true: 'active', false:''}[$index == playing]"
       ng-repeat="song in playlist"
-      ng-click="play($index)">
+      ng-click="PlaylistService.play($index)">
       <img ng-src="/pic/{{song.id}}/32"/> {{song.id3_artist}} - {{song.id3_title}}
     </li>
   </li>

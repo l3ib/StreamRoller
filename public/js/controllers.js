@@ -27,6 +27,7 @@ function NavigationCtrl($scope, $playlist) {
 // controller for player at top of page
 function PlayerCtrl($scope, $player, $playlist) {
   $scope.player = $player;
+  $scope.playlist = $playlist;
 
   // two-way binding for if player is paused
   $scope.$watch("player.paused", function() {
@@ -51,19 +52,6 @@ function PlayerCtrl($scope, $player, $playlist) {
     $scope.timeLeft = $player.timeLeft;
   });
 
-  // expose $player services to the audio player template
-  $scope.togglePause = function() {
-    $player.togglePause();
-  };
-
-  $scope.changeVolume = function(amt) {
-    $player.changeVolume(amt);
-  }
-
-  $scope.skipSong = function(amt) {
-    $playlist.skipSong(amt);
-  }
-
   // used to set the proper icon
   $scope.getPlayString = function() {
     return $scope.paused ? 'play' : 'pause';
@@ -75,24 +63,14 @@ function PlaylistCtrl($rootScope, $scope, $http, $playlist) {
   $scope.PlaylistService = $playlist;     // expose the playlist service to the scope for $watch
   $scope.playlist = $playlist.playlist;   // playlist array containing song objects
 
-  // links to playlist service from playlist template
-  $scope.play = function(i) {
-    $playlist.play(i);
-  };
-
-  $scope.clear = function() {
-    $playlist.clear();
-    $scope.playlist = $playlist.playlist;
-  };
-
-  $scope.generateM3U = function() {
-    $playlist.generateM3U();
-  };
+  $scope.$watch("PlaylistService.playlist", function() {
+    $scope.playlist = $scope.PlaylistService.playlist;
+  });
 
   // need to update hilight if we're sitting on the playlist tab
   $scope.$watch("PlaylistService.playing", function() {
     $scope.playing = $scope.PlaylistService.playing;
-  })
+  });
 
   // indicate to navigation controller where we are
   $rootScope.$broadcast('navChanged', {section: 'playlist'});
@@ -141,15 +119,15 @@ function ArtistDetailCtrl($rootScope, $scope, $http, $routeParams, $playlist, $p
     }
   };
 
-  // if the url doesn't have /:artist/ we have nothing to do
-  if ( !$routeParams.artist ) {
-    return;
-  }
-
   // generate a 'nice' url for the browse button
   var url = '/' + $routeParams.artist;
   if ( $routeParams.album ) url += '/'+ $routeParams.album;
   $rootScope.$broadcast('navChanged', {section: 'browse', url: url});
+
+  // if the url doesn't have /:artist/ we have nothing to do
+  if ( !$routeParams.artist ) {
+    return;
+  }
 
   // url the actual json call is made at
   url = '/browse' + url;
