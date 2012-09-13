@@ -1,11 +1,10 @@
-  <input type="search" ng-model="query" placeholder="Search artists and albums..."/>
   <ul class="well well-small nav nav-list" ng-controller="ArtistListCtrl">
 
-    <li ng-class="getClass(artist.name, false)" ng-repeat="artist in artists | filter:query ">
+    <li ng-class="getClass(artist.name, false)" ng-repeat="artist in artists | filter:rootScope.query ">
       <a href="#/{{artist.name}}/">{{artist.name}}</a>
 
       <ul class="nav nav-list">
-        <li ng-class="getClass(album, true)" ng-repeat="album in artist.albums | filter:query">
+        <li ng-class="getClass(album, true)" ng-repeat="album in artist.albums | filter:rootScope.query">
           <a href="#/{{artist.name}}/{{album}}/">{{album}}</a>
         </li>
       </ul>

@@ -1,6 +1,11 @@
 .player {
-  background-color: black;
-  height: 100px;
+  background-color: #1b1b1b;
+  background-image: -moz-linear-gradient(top, #333333, #111111);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#333333), to(#111111));
+  background-image: -webkit-linear-gradient(top, #333333, #111111);
+  background-image: -o-linear-gradient(top, #333333, #111111);
+  background-image: linear-gradient(to bottom, #333333, #111111);
+  background-repeat: repeat-x;
   margin: 0;
   text-align: center;
 }
@@ -42,8 +47,17 @@
     transition: none;
 }
 
+.bar {
+  background-color: whiteSmoke;
+  border-bottom: 1px solid #E3E3E3;
+}
+
+.bar .span9 {
+  padding-left: 20px;
+}
+
 body {
-  margin-top: 8em;
+  margin-top: 145px;
   overflow-y: scroll;
 }
 
@@ -56,11 +70,12 @@ body {
   height: 150px;
 }
 
-.artistList input {
+#search {
   width: 100%;
   box-sizing: border-box;
+  margin-left: 20px;
   padding: 15px 0 15px 10px;
-  margin-top: 1px;
+  margin-top: 5px;
 }
 
 .albumList {

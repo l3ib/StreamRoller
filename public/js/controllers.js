@@ -20,7 +20,8 @@ function NavigationCtrl($scope, $playlist) {
 }
 
 // controller for player at top of page
-function PlayerCtrl($scope, $player, $playlist) {
+function PlayerCtrl($scope, $player, $playlist, $rootScope) {
+  $scope.rootScope = $rootScope;
   $scope.player = $player;
   $scope.playlist = $playlist;
 
@@ -40,7 +41,10 @@ function PlaylistCtrl($rootScope, $scope, $http, $playlist) {
 }
 
 // controller for left pane artist -> album list
-function ArtistListCtrl($scope, $http, $routeParams) {
+function ArtistListCtrl($scope, $http, $routeParams, $rootScope) {
+
+  $scope.rootScope = $rootScope;
+
   // handle highlighting logic. if viewing an album,
   // only highlight the album and not the artist.
   $scope.getClass = function(name, isAlbum) {
