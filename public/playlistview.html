@@ -14,6 +14,7 @@
       ng-repeat="song in playlist.playlist"
       ng-click="playlist.play($index)">
       <img ng-src="/pic/{{song.id}}/32"/> {{song.id3_artist}} - {{song.id3_title}}
+      <button ng-click="playlist.delete($index)" class="btn btn-danger pull-right">Remove</button>
     </li>
   </li>
 </div>

@@ -1,10 +1,10 @@
 .player {
   background-color: #1b1b1b;
-  background-image: -moz-linear-gradient(top, #333333, #111111);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#333333), to(#111111));
-  background-image: -webkit-linear-gradient(top, #333333, #111111);
-  background-image: -o-linear-gradient(top, #333333, #111111);
-  background-image: linear-gradient(to bottom, #333333, #111111);
+  background-image: -moz-linear-gradient(top, #222222, #111111);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#222222), to(#111111));
+  background-image: -webkit-linear-gradient(top, #222222, #111111);
+  background-image: -o-linear-gradient(top, #222222, #111111);
+  background-image: linear-gradient(to bottom, #222222, #111111);
   background-repeat: repeat-x;
   margin: 0;
   text-align: center;
@@ -128,4 +128,14 @@ body {
 
 .playlist li:hover {
   background-color: #ddd;
+}
+
+.playlist li button {
+  margin-top: 1px;
+  visibility: hidden;
+}
+
+.playlist li:hover button {
+  margin-top: 1px;
+  visibility: visible;
 }

@@ -87,6 +87,7 @@ angular.module('playlist', ['player'], function($provide) {
   // playlist module
   $provide.factory('$playlist', function($rootScope, $player) {
     var srv = {};
+    var internalPlaying = 0;
 
     srv.playlist = [];    // list of song objects in the playlist
     srv.playing = 0;      // array index of currently playing song
@@ -106,13 +107,27 @@ angular.module('playlist', ['player'], function($provide) {
       if ( !srv.playlist[i] ) {
         return;
       }
+      internalPlaying = i;
       srv.playing = i;
       $player.play( srv.playlist[i] );
     };
 
+    srv.delete = function(i) {
+      srv.playlist.splice(i,1);
+      if ( i == srv.playing ) {
+        srv.playing = -1;
+      } else if ( i < srv.playing ) {
+        srv.playing--;
+        srv.internalPlaying--;
+      }
+    };
+
     // skip amt places in the playlist, wrap around in both directions
     srv.skipSong = function(amt) {
-      var i = (srv.playing + amt) % srv.playlist.length;
+      if ( srv.playing == -1 ) {
+        amt += amt > 0 ? -1 : 0;
+      }
+      var i = (internalPlaying + amt) % srv.playlist.length;
       if ( i < 0 ) {
         i = srv.playlist.length - (Math.abs(i) % srv.playlist.length);
       }

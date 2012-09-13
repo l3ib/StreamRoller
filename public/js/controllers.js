@@ -1,11 +1,8 @@
 // controller for tabbed nav
 function NavigationCtrl($scope, $playlist) {
-  var self = this;
-
   $scope.url = '';                  // where the browse tab should link to
   $scope.currentNav = 'browse';     // which button should be hilighted
   $scope.playlist = $playlist;      // playlist service for view
-
 
   // controllers wishing to change the nav broadcast on $rootScope
   $scope.$on('navChanged', function(e, o) {
@@ -32,7 +29,7 @@ function PlayerCtrl($scope, $player, $playlist, $rootScope) {
 }
 
 // controller for playlist tab
-function PlaylistCtrl($rootScope, $scope, $http, $playlist) {
+function PlaylistCtrl($rootScope, $scope, $playlist) {
   $scope.playlist = $playlist;     // expose the playlist service to the view
 
   // indicate to navigation controller where we are
@@ -42,7 +39,6 @@ function PlaylistCtrl($rootScope, $scope, $http, $playlist) {
 
 // controller for left pane artist -> album list
 function ArtistListCtrl($scope, $http, $routeParams, $rootScope) {
-
   $scope.rootScope = $rootScope;
 
   // handle highlighting logic. if viewing an album,
