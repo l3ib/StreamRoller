@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app>
 <head>
   <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
   <title>StreamRoller</title>
@@ -8,9 +8,21 @@
   <script type="text/javascript" src="/js/lib/jquery-1.8.0.js"></script>
   <script type="text/javascript" src="/js/lib/underscore.js"></script>
   <script type="text/javascript" src="/js/lib/backbone.js"></script>
-  <script type="text/javascript" src="/js/phonegap-media-emulator.js"></script>
+  <script type="text/javascript" src="/js/lib/soundmanager2.js"></script>
 </head>
 <body>
-<%= partial('mobile.partial') %>
+<%#= partial('mobile.partial') %>
+
+<script type="text/javascript">
+  var onReady = function() {
+    console.log("hello")
+    $.get("/mobile.partial.html", function(data) {
+      $("body").append(data);
+    });
+  };
+
+  $(onReady);
+</script>
+
 </body>
 </html>

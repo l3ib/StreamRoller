@@ -1,7 +1,7 @@
 Playlist = function(serverAddress, list) {
   this.list = list;
   this.index = 0;
-  this.player = new Player(serverAddress);
+  this.player = new SoundManagerPlayer(serverAddress);
 
   var that = this;
   this.player.on("audio-ended", function() {
@@ -22,25 +22,19 @@ Playlist.prototype.next = function() {
 };
 
 Playlist.prototype.skip = function() {
-  var that = this;
-  this.player.manually(function() {
-    that.next();
-  });
+  this.next();
 }
 
 Playlist.prototype.prev = function() {
-  var that = this;
-  this.player.manually(function() {
-    if(that.index == 0) {
-      console.log("Beginning of playlist reached, stopping");
-      return;
-    }
+  if(this.index == 0) {
+    console.log("Beginning of playlist reached, stopping");
+    return;
+  }
 
-    console.log("Switching to previous song");
-    that.stop();
-    that.index = this.index - 1;
-    that.playCurrent();
-  });
+  console.log("Switching to previous song");
+  this.player.stop();
+  this.index = this.index - 1;
+  this.playCurrent();
 };
 
 Playlist.prototype.pause = function() {

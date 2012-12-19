@@ -3,54 +3,60 @@
 <button id="skip">Skip</button><br />
 <button id="prev">Previous</button><br />
 
-<input type="text" id="start-id" value="4184" /><br />
-<input type="text" id="playlist-length" value="13" /><br />
-<button id="generate-new">Generate new playlist</button>
+<input type="text" id="start-id" value="4218" /><br />
 
 <script type="text/javascript">
   var onReady = function() {
-    playlist = null;
-    var generateNewPlaylist = function() {
-      var start = $("#start-id").val();
-      var length = $("#playlist-length").val();
-
-      var sublist = [];
-      for(var i = 0; i < length; i++) {
-        sublist.push(Number(start) + i);
+    soundManager.setup({preferFlash: false, url: "/swf",
+      useHTML5Audio: true,
+      onready: function() {
+        soundManager.html5Only = true;
+        console.log('Ready to play sound!');
+        player = new ConsecutivePlayer("<%= server_path %>", 1);
       }
-      playlist = new Playlist("<%= server_path %>", sublist);
-    };
-
-    generateNewPlaylist();
-
-    $("#play").on("click", function() {
-      console.log("Play clicked");
-      playlist.playCurrent();
     });
 
     $("#pause").on("click", function() {
-      playlist.pause();
+      player.pause();
     });
 
     $("#skip").on("click", function() {
-      playlist.skip();
+      player.skip();
     });
 
     $("#prev").on("click", function() {
-      playlist.prev();
+      player.prev();
     });
 
-    $("#generate-new").on("click", function() {
-      generateNewPlaylist();
+    $("#play").on("click", function() {
+      console.log("Play clicked");
+      var start = Number($("#start-id").val());
+      player.currentId = start;
+      player.play();
     });
   };
+
+  window.server_path = "<%= server_path %>";
 
   var expand = function(libraryName) {
     return "<%= server_path %>/js/" + libraryName + ".js";
   }
 
+  console.log(expand("new-playlist"));
+
   $LAB
-    .script(expand("new-player"))
-    .script(expand("new-playlist"))
+    .script(expand("soundmanager-player"))
+    .script(expand("consecutive-player"))
+    .script(expand("controllers"))
+    .script(expand("lib/angular"))
     .wait(onReady);
 </script>
+
+<ul ng-controller="AlbumListCtrl">
+  <li ng-repeat="artist in artists">
+    {{artist.name}}
+    <ul>
+      <li ng-repeat="album in artist.albums"><button ng-click="selectAlbum(album.name)">{{album.name}}</button></li>
+    </ul>
+  </li>
+</ul>
